@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Trùm Sub Like">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#f7faff">
+  <meta name="description" content="Khởi động Trùm Sub Like — Phát triển bởi Nguyễn Công Mỹ.">
+  <meta property="og:title" content="Trùm Sub Like">
+  <meta property="og:description" content="Mở Trùm Sub Like từ màn hình chính iPhone.">
+  <meta name="referrer" content="same-origin">
+  <title>Trùm Sub Like</title>
+  <link rel="apple-touch-icon" sizes="512x512" href="__ICON_DATA_URL__">
+  <!-- Fallback for Safari versions that do not accept data: touch icons. -->
+  <link rel="apple-touch-icon" href="./icon.png">
+  <link rel="icon" type="image/png" href="__ICON_DATA_URL__">
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", sans-serif; color: #08225b; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #f7faff; }
+    body { min-height: 100vh; min-height: 100svh; overflow: hidden; }
+    .splash {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+        max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+      background: linear-gradient(135deg, rgb(233,243,255), rgb(247,250,255), rgb(228,239,255));
+      transition: opacity 320ms ease-out, transform 320ms ease-out;
+    }
+    .content { display: flex; flex-direction: column; align-items: center; max-width: 100%; }
+    .artwork { width: 260px; height: 260px; position: relative; flex: 0 0 auto; }
+    .halo { position: absolute; inset: 2px; border-radius: 50%; background: radial-gradient(circle, rgba(32,137,255,.188), transparent 70%); }
+    .orbit { position: absolute; inset: 18px; border: 1px solid rgba(30,123,237,.173); border-radius: 50%; animation: orbit 2100ms linear both; }
+    .orbit::after { content: ""; position: absolute; width: 6px; height: 6px; top: calc(50% - 3px); right: -3px; border-radius: 50%; background: rgba(42,160,250,.69); }
+    .logo-shell { position: absolute; width: 172px; height: 172px; top: 44px; left: 44px; border-radius: 28px; overflow: hidden; background: white; box-shadow: 0 7px 18px rgba(8,34,91,.15); isolation: isolate; }
+    .logo { width: 100%; height: 100%; object-fit: contain; display: block; animation: logo-enter 820ms cubic-bezier(.2,.85,.25,1.1) both; }
+    .sheen { position: absolute; inset: -30%; background: linear-gradient(108deg, transparent 38%, rgba(233,249,255,.39) 50%, transparent 62%); pointer-events: none; animation: sheen 2100ms linear both; }
+    h1 { margin: 2px 0 0; font-size: 27px; line-height: 1.22; font-weight: 700; letter-spacing: 0; text-align: center; }
+    .credit { margin: 12px 0 0; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 12px; white-space: nowrap; }
+    .credit span { display: block; background: linear-gradient(100deg, #08225b 36%, #1d78ec 50%, #08225b 64%); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: credit-reveal 1100ms 220ms cubic-bezier(.2,.65,.3,1) both, credit-light 1800ms 220ms linear both; }
+    .light-track { width: 154px; height: 4px; margin-top: 8px; position: relative; overflow: hidden; border-radius: 3px; }
+    .light-track::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #239bff, transparent); animation: light-sweep 1800ms ease-in-out both; }
+    .leaving .splash { opacity: 0; transform: translateY(-6px); }
+    .skip .splash { opacity: 0; }
+    .continue { position: fixed; bottom: max(26px, env(safe-area-inset-bottom)); left: 16px; right: 16px; text-align: center; font-size: 13px; color: #0964f5; }
+    .continue[hidden] { display: none; }
+    @keyframes logo-enter { from { opacity: 0; transform: scale(.86); } to { opacity: 1; transform: scale(1); } }
+    @keyframes orbit { from { transform: rotate(-130deg); } to { transform: rotate(100deg); } }
+    @keyframes sheen { from { transform: translateX(-130%); } to { transform: translateX(130%); } }
+    @keyframes credit-reveal { from { clip-path: inset(0 100% 0 0); opacity: 0; } to { clip-path: inset(0 0 0 0); opacity: 1; } }
+    @keyframes credit-light { from { background-position: 100% 0; } to { background-position: 0 0; } }
+    @keyframes light-sweep { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .credit span { background: none; color: #08225b; }
+    }
+    @media (max-height: 390px) { .content { transform: scale(.78); } }
+  </style>
+</head>
+<body>
+  <main class="splash" aria-label="Đang mở Trùm Sub Like">
+    <div class="content">
+      <div class="artwork">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="orbit" aria-hidden="true"></div>
+        <div class="logo-shell">
+          <img class="logo" src="__ICON_DATA_URL__" width="172" height="172" alt="Logo Trùm Sub Like" fetchpriority="high">
+          <div class="sheen" aria-hidden="true"></div>
+        </div>
+      </div>
+      <h1>Trùm Sub Like</h1>
+      <p class="credit"><span>Phát triển bởi Nguyễn Công Mỹ</span></p>
+      <div class="light-track" aria-hidden="true"></div>
+    </div>
+  </main>
+  <a id="continue" class="continue" href="https://trumsublike.com" hidden>Tiếp tục vào Trùm Sub Like</a>
+  <noscript><style>.continue[hidden] { display: block; }</style></noscript>
+  <script>
+    (() => {
+      "use strict";
+      const TARGET = "https://trumsublike.com";
+      const SESSION_KEY = "trumsublike.ios.splash.v1";
+      const preview = new URLSearchParams(location.search).get("preview") === "1";
+      const fallback = document.getElementById("continue");
+      let redirecting = false;
+      let seen = false;
+      let exitTimer;
+      let navigationTimer;
+
+      function navigate() {
+        if (redirecting || preview) return;
+        redirecting = true;
+        try { location.replace(TARGET); }
+        catch (_) { document.body.classList.remove("leaving", "skip"); fallback.hidden = false; }
+      }
+      // Storage can be unavailable in restricted/private contexts; navigation must still work.
+      try {
+        seen = sessionStorage.getItem(SESSION_KEY) === "seen";
+        if (!preview) sessionStorage.setItem(SESSION_KEY, "seen");
+      } catch (_) {}
+
+      if (preview) {
+        fallback.hidden = false;
+        return;
+      }
+      if (seen) {
+        document.body.classList.add("skip");
+        navigate();
+      } else {
+        const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        exitTimer = setTimeout(() => {
+          document.body.classList.add("leaving");
+          navigationTimer = setTimeout(navigate, reduced ? 0 : 320);
+        }, reduced ? 180 : 1480);
+      }
+      // A restored launch page must not repeat the splash on Back/bfcache.
+      window.addEventListener("pageshow", event => { if (event.persisted) navigate(); });
+      window.addEventListener("pagehide", () => { clearTimeout(exitTimer); clearTimeout(navigationTimer); });
+      setTimeout(() => { fallback.hidden = false; }, 2600);
+    })();
+  </script>
+</body>
+</html>
